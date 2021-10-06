@@ -143,8 +143,8 @@ for idx in range(iter_time.shape[1]):
 plt.ylabel(yaxis_name, fontsize=font_size)
 plt.xticks(x + (iter_time.shape[1]/2)*barwidth,
            dataset, fontsize=font_size*0.75, rotation=0)
-plt.yticks(np.arange(0, 325, 75), fontsize=font_size)
-plt.legend(fontsize=font_size)
+plt.yticks(np.arange(0, 321, 80), fontsize=font_size)
+plt.legend(fontsize=font_size, frameon=False)
 for i in range(len(iter_time)):
     max_speedup = max(
         max_speedup, 100 * (max(iter_time[i]) - iter_time[i][1]) / max(iter_time[i]))
