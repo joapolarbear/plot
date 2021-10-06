@@ -54,16 +54,16 @@ for idx in range(len(x_name)):
     bars = ax.bar(
         x + idx*barwidth, _iter_time[:, idx],
         width=barwidth, label=x_name[idx])
-    for bar in bars:
-        bar.set_hatch(marks[idx])
+    # for bar in bars:
+    #     bar.set_hatch(marks[idx])
 ax.grid(False)
 plt.ylabel("Iteration Time (ms)", fontsize=font_size)
 plt.ylim(0, 1.4*np.max(_iter_time))
 plt.xticks(x + (len(x_name)/2)*barwidth, configs,
             fontsize=font_size*0.75, rotation=0)
 # plt.xlabel(title)
-plt.yticks(fontsize=font_size)
-plt.legend(ncol=3, fontsize=font_size)
+plt.yticks(np.arange(0, 1001, 250), fontsize=font_size)
+plt.legend(ncol=3, fontsize=font_size, frameon=False)
 
 ax2 = ax.twinx()  # instantiate a second axes that shares the same x-axis
 color = 'firebrick'
@@ -116,18 +116,19 @@ x = np.arange(len(dataset))
 
 fig = plt.figure(figsize=(15, 5))
 ax = plt.subplot(111)
+ax.grid(axis='x')
 yaxis_data = 1000 * BATCH_SIZE / iter_time if USE_THROUGHPUT else iter_time
 yaxis_name = "Throughput\n(samples/s)" if USE_THROUGHPUT else "Iteration Time (ms)"
 
 for idx in range(iter_time.shape[1]):
     bars = ax.bar(
         x + idx*barwidth, yaxis_data[:, idx], width=barwidth, label=strategy[idx])
-    for bar in bars:
-        bar.set_hatch(marks[idx])
+    # for bar in bars:
+    #     bar.set_hatch(marks[idx])
 plt.ylabel(yaxis_name, fontsize=font_size)
 plt.xticks(x + (iter_time.shape[1]/2)*barwidth,
            dataset, fontsize=font_size*0.75, rotation=0)
-plt.yticks(fontsize=font_size)
+plt.yticks(np.arange(0, 325, 75), fontsize=font_size)
 plt.legend(fontsize=font_size)
 for i in range(len(iter_time)):
     max_speedup = max(
@@ -168,18 +169,19 @@ for i in range(len(iter_time)):
         max_speedup, 100 * (max(iter_time[i]) - iter_time[i][1]) / max(iter_time[i]))
 fig = plt.figure(figsize=(15, 5))
 ax = plt.subplot(111)
+ax.grid(axis='x')
 yaxis_data = 1000 * BATCH_SIZE / iter_time if USE_THROUGHPUT else iter_time
 yaxis_name = "Throughput\n(samples/sec)" if USE_THROUGHPUT else "Iteration Time (ms)"
 
 for idx in range(yaxis_data[:, _filter].shape[1]):
     bars = ax.bar(
         x + idx*barwidth, yaxis_data[:, _filter][:, idx], width=barwidth, label=strategy[_filter][idx])
-    for bar in bars:
-        bar.set_hatch(marks[idx])
+    # for bar in bars:
+    #     bar.set_hatch(marks[idx])
 plt.ylabel(yaxis_name, fontsize=font_size)
 plt.xticks(x + (iter_time.shape[1]/2)*barwidth,
            dataset, fontsize=font_size*0.75, rotation=0)
-plt.yticks(fontsize=font_size)
+plt.yticks(np.arange(0, 325, 75), fontsize=font_size)
 plt.legend(fontsize=font_size)
 plt.subplots_adjust(left=0.12, bottom=0.15, right=0.97, top=0.95,
                     wspace=0.2, hspace=0.3)

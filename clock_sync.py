@@ -10,7 +10,7 @@ plt.rcParams["font.sans-serif"] = "Simhei"
 USE_THROUGHPUT = False
 BATCH_SIZE = 32
 marks = ["/", "-", "\\", "x", "+", "."]
-barwidth = 0.2
+barwidth = 0.3
 font_size = 24
 
 save_dir = "./fig/clock_sync"
@@ -18,14 +18,14 @@ if not os.path.exists(save_dir):
     os.makedirs(save_dir)
 
 dataset = np.array([
-    "hvd TCP\nResNet50",
-    "hvd TCP\nInceptionV3",
-    "hvd TCP \nVGG16",
-    "hvd TCP \nBERT_Base",
-    "byteps RDMA\nResNet50",
-    "byteps RDMA\nInceptionV3",
-    "byteps RDMA\nVGG16",
-    "byteps RDMA \nBERT_Base"
+    "HVD TCP\nResNet50",
+    "HVD TCP\nInceptionV3",
+    "HVD TCP \nVGG16",
+    "HVD TCP \nBERT_Base",
+    "BPS RDMA\nResNet50",
+    "BPS RDMA\nInceptionV3",
+    "BPS RDMA\nVGG16",
+    "BPS RDMA \nBERT_Base"
 ])
 x = np.arange(len(dataset))
 
@@ -44,6 +44,8 @@ iter_time = np.array([
 
 fig = plt.figure(figsize=(12, 4))
 ax = plt.subplot(111)
+ax.grid(axis='x')
+# ax2 = ax.twinx()
 yaxis_data = 1000 * BATCH_SIZE / iter_time if USE_THROUGHPUT else iter_time
 yaxis_name = "Throughput\n(samples/s)" if USE_THROUGHPUT else "Iteration Time (ms)"
 
@@ -54,15 +56,15 @@ if True:
     yaxis_name = "MAPE (%)"
     print(np.max(yaxis_data))
 
-for idx in range(yaxis_data[:, _filter].shape[1]):
+for idx in range(1, yaxis_data[:, _filter].shape[1]):
     bars = ax.bar(
         x + idx*barwidth, yaxis_data[:, _filter][:, idx], width=barwidth, label=strategy[_filter][idx])
-    for bar in bars:
-        bar.set_hatch(marks[idx])
+    # for bar in bars:
+        # bar.set_hatch(marks[idx])
 plt.ylabel(yaxis_name, fontsize=font_size)
-plt.xticks(x + (iter_time.shape[1]/2-0.5)*barwidth, dataset, fontsize=font_size*0.65, rotation=30)
-plt.yticks(fontsize=font_size)
-plt.legend(fontsize=font_size*0.75)
+plt.xticks(x + (iter_time.shape[1]/2-0.5)*barwidth, dataset, fontsize=font_size*0.65, rotation=25)
+plt.yticks(np.arange(0, 21, 5), fontsize=font_size-2)
+plt.legend(fontsize=font_size*0.75, frameon=False)
 plt.subplots_adjust(left=0.13, bottom=0.2, right=0.95, top=0.95,
                     wspace=0.2, hspace=0.3)
 plt.savefig("fig/clock_sync/clock_sync.pdf", bbox_inches='tight')

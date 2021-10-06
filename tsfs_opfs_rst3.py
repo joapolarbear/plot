@@ -30,14 +30,14 @@ strategy = np.array([
 ])
 _filter = np.array([0, 1, 2, 3, 4])
 dataset = np.array([
-    "hvd\nResNet50",
-    "bps\nResNet50",
-    "hvd\nInceptionV3",
-    "bps\nInceptionV3",
-    "hvd\nBERT Base",
-    "bps\nBERT Base",
-    "hvd\nVGG16",
-    "bps\nVGG16",
+    "HVD\nResNet50",
+    "BPS\nResNet50",
+    "HVD\nInceptionV3",
+    "BPS\nInceptionV3",
+    "HVD\nBERT Base",
+    "BPS\nBERT Base",
+    "HVD\nVGG16",
+    "BPS\nVGG16",
 ])
 
 
@@ -76,8 +76,9 @@ def trial(iter_time, pdf_name="tsfs_opfs_all_tcp", legend=True):
 
     fig = plt.figure(figsize=(15, 4))
     ax = plt.subplot(111)
+    ax.grid(axis='x')
     yaxis_data = 1000 * BATCH_SIZE / iter_time if USE_THROUGHPUT else iter_time
-    yaxis_name = "Throughput\n(samples/sec)" if USE_THROUGHPUT else "Iteration Time (ms)"
+    yaxis_name = "Throughput" if USE_THROUGHPUT else "Iteration Time (ms)"
 
     if Normalize is not None:
         base = yaxis_data[:, Normalize].reshape(len(dataset), 1)
@@ -87,13 +88,13 @@ def trial(iter_time, pdf_name="tsfs_opfs_all_tcp", legend=True):
     for idx in range(yaxis_data[:, _filter].shape[1]):
         bars = ax.bar(
             x + idx*barwidth, yaxis_data[:, _filter][:, idx], width=barwidth, label=strategy[_filter][idx])
-        for bar in bars:
-            bar.set_hatch(marks[idx])
+        # for bar in bars:
+        #     bar.set_hatch(marks[idx])
     plt.ylabel(yaxis_name, fontsize=font_size)
     plt.xticks(x + (iter_time.shape[1]/2)*barwidth, dataset, fontsize=font_size*0.7, rotation=0)
-    plt.yticks(fontsize=font_size * 0.8)
+    plt.yticks(np.arange(0, 1.6, 0.3), fontsize=font_size * 0.8)
     if legend:
-        plt.legend(bbox_to_anchor=(0., 1.08, 1., .102), ncol=5, fontsize=font_size * 0.75)
+        plt.legend(bbox_to_anchor=(0., 1.08, 1., .102), ncol=5, fontsize=font_size * 0.75, frameon=False)
         plt.subplots_adjust(left=0.13, bottom=0.1, right=0.95, top=0.95,
                         wspace=0.2, hspace=0.3)
     else:

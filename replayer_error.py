@@ -1,7 +1,8 @@
 
 import os
-import pandas as pd
+# import pandas as pd
 import numpy as np
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 import seaborn as sns
 from matplotlib.ticker import MultipleLocator, FormatStrFormatter
@@ -9,6 +10,8 @@ from matplotlib.ticker import MultipleLocator, FormatStrFormatter
 if not os.path.exists("fig/replay"):
     os.mkdir("fig/replay")
 # os.system("rm -rf fig/replay/*")
+
+mpl.rcParams['hatch.linewidth'] = 0.5
 
 # Set the palette using the name of a palette:
 sns.set_theme(style="whitegrid", color_codes=True)
@@ -23,9 +26,9 @@ font_size = 36
 
 x_name = ["Ground Truth", "dPRO", "Daydream"]
 configs = [
-    "hvd+TF",
-    "hvd+MX",
-    "bps+TF",
+    "HVD+TF",
+    "HVD+MX",
+    "BPS+TF",
 ]
 x = np.arange(len(configs))
 
@@ -89,12 +92,12 @@ for idx in range(len(x_name)):
     bars = ax.bar(
         x + idx*barwidth, _iter_time[:, idx],
         width=barwidth, label=x_name[idx])
-    for bar in bars:
-        bar.set_hatch(marks[idx])
+    # for bar in bars:
+    #     bar.set_hatch(marks[idx])
 
 # plt.xlabel(title)
 plt.yticks(fontsize=font_size)
-legend = plt.legend(ncol=3, fontsize=font_size)
+legend = plt.legend(ncol=3, fontsize=font_size, frameon=False)
 label_params = ax.get_legend_handles_labels()
 figl, axl = plt.subplots(figsize=(50, 1))
 axl.axis(False)
@@ -118,10 +121,10 @@ for _key, _iter_time in iter_time.items():
         bars = ax.bar(
             x + idx*barwidth, _iter_time[:, idx],
             width=barwidth, label=x_name[idx])
-        for bar in bars:
-            bar.set_hatch(marks[idx])
+        # for bar in bars:
+        #     bar.set_hatch(marks[idx])
     ax.grid(False)
-    plt.ylabel("Iteration Time (ms)", fontsize=font_size)
+    plt.ylabel("Iteration Time (ms)", fontsize=font_size+2)
     # ax.set_yticks(np.arange(0, 1.4*np.max(_iter_time), int(1.4*np.max(_iter_time)/4)))
     plt.ylim(0, 1.4*np.max(_iter_time))
     ymajorLocator = MultipleLocator(int(1.4*np.max(_iter_time)/4//10*10))
@@ -139,7 +142,7 @@ for _key, _iter_time in iter_time.items():
              color=color, linewidth=3, markersize=10)
     ax2.tick_params(axis='y', labelcolor=color)
     for label in ax2.yaxis.get_majorticklabels():
-        label.set_fontsize(font_size)
+        label.set_fontsize(font_size+2)
         # label.set_fontname('courier')
     # plt.ylim(0, 20)
     ax2.set_yticks(np.arange(0, 25, 5))

@@ -37,16 +37,16 @@ for idx in range(len(x_name)):
     bars = ax.bar(
         x + idx*barwidth, _iter_time[:, idx],
         width=barwidth, label=x_name[idx])
-    for bar in bars:
-        bar.set_hatch(marks[idx])
+    # for bar in bars:
+    #     bar.set_hatch(marks[idx])
 ax.grid(False)
 plt.ylabel("Iteration Time (ms)", fontsize=font_size)
 plt.ylim(0, 1.4*np.max(_iter_time))
 plt.xticks(x + (len(x_name)/2)*barwidth, configs,
             fontsize=font_size*0.75, rotation=0)
 # plt.xlabel(title)
-plt.yticks(fontsize=font_size)
-plt.legend(loc=2, ncol=2, fontsize=font_size)
+plt.yticks(np.arange(0, 301, 60), fontsize=font_size-4)
+plt.legend(loc=2, ncol=2, fontsize=font_size, frameon=False)
 
 ax2 = ax.twinx()  # instantiate a second axes that shares the same x-axis
 color = 'firebrick'
@@ -55,7 +55,7 @@ ax2.plot(x + barwidth, mse[:, 1], '-o',
             color=color, linewidth=3, markersize=10)
 ax2.tick_params(axis='y', labelcolor=color)
 for label in ax2.yaxis.get_majorticklabels():
-    label.set_fontsize(font_size)
+    label.set_fontsize(font_size-4)
     # label.set_fontname('courier')
 # plt.ylim(0, 20)
 ax2.set_yticks(np.arange(0, 60, 10))
@@ -83,3 +83,4 @@ plt.legend(loc=2, ncol=2, fontsize=font_size)
 plt.subplots_adjust(left=0.1, bottom=0.2, right=0.99, top=0.9,
                     wspace=0.2, hspace=0.4)
 plt.savefig("fig/linear_speedup.pdf", bbox_inches='tight')
+# plt.show()
