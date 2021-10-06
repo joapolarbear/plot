@@ -53,7 +53,7 @@ if True:
     base = iter_time[:, 0].reshape(len(dataset), 1)
     mse = 100 * np.abs(iter_time - base) / base
     yaxis_data = mse
-    yaxis_name = "MAPE (%)"
+    yaxis_name = "Prediction Error (%)"
     print(np.max(yaxis_data))
 
 for idx in range(1, yaxis_data[:, _filter].shape[1]):

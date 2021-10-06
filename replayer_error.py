@@ -125,10 +125,12 @@ for _key, _iter_time in iter_time.items():
         #     bar.set_hatch(marks[idx])
     ax.grid(False)
     plt.ylabel("Iteration Time (ms)", fontsize=font_size+2)
-    # ax.set_yticks(np.arange(0, 1.4*np.max(_iter_time), int(1.4*np.max(_iter_time)/4)))
-    plt.ylim(0, 1.4*np.max(_iter_time))
-    ymajorLocator = MultipleLocator(int(1.4*np.max(_iter_time)/4//10*10))
-    ax.yaxis.set_major_locator(ymajorLocator) 
+    import math
+    max_y_value = int(math.ceil(1.05*np.max(_iter_time)/100)*100)
+    ax.set_yticks(np.arange(0, max_y_value+1, int(max_y_value/4)))
+    # plt.ylim(0, 1.2*np.max(_iter_time))
+    # ymajorLocator = MultipleLocator(int(1.1*np.max(_iter_time)/4//10*10))
+    # ax.yaxis.set_major_locator(ymajorLocator) 
     plt.xticks(x + (len(x_name)/2-0.5)*barwidth, configs,
                fontsize=font_size, rotation=0)
     # plt.xlabel(title)
@@ -136,11 +138,10 @@ for _key, _iter_time in iter_time.items():
     # legend = plt.legend(ncol=3, fontsize=font_size)
 
     ax2 = ax.twinx()  # instantiate a second axes that shares the same x-axis
-    color = 'firebrick'
-    ax2.set_ylabel('dPRO MAPE (%)', color=color, fontsize=font_size)  # we already handled the x-label with ax1
-    ax2.plot(x + barwidth, mse[:, 1], '-o',
-             color=color, linewidth=3, markersize=10)
-    ax2.tick_params(axis='y', labelcolor=color)
+    ax2.set_ylabel('dPRO Error (%)', fontsize=font_size)  # we already handled the x-label with ax1
+    ax2.plot(x + barwidth, mse[:, 1], '-o', color='red',
+             linewidth=3, markersize=10)
+    ax2.tick_params(axis='y')
     for label in ax2.yaxis.get_majorticklabels():
         label.set_fontsize(font_size+2)
         # label.set_fontname('courier')

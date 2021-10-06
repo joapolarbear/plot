@@ -62,16 +62,16 @@ plt.ylim(0, 1.4*np.max(_iter_time))
 plt.xticks(x + (len(x_name)/2)*barwidth, configs,
             fontsize=font_size*0.75, rotation=0)
 # plt.xlabel(title)
-plt.yticks(np.arange(0, 1001, 250), fontsize=font_size)
+plt.yticks(np.arange(0, 1201, 300), fontsize=font_size)
 plt.legend(ncol=3, fontsize=font_size, frameon=False)
 
 ax2 = ax.twinx()  # instantiate a second axes that shares the same x-axis
-color = 'firebrick'
+color = 'red'
 # we already handled the x-label with ax1
-ax2.set_ylabel('dPRO MAPE (%)', color=color, fontsize=font_size)
+ax2.set_ylabel('dPRO Error (%)', fontsize=font_size)
 ax2.plot(x + barwidth, mse[:, 1], '-o',
             color=color, linewidth=3, markersize=10)
-ax2.tick_params(axis='y', labelcolor=color)
+ax2.tick_params(axis='y')
 for label in ax2.yaxis.get_majorticklabels():
     label.set_fontsize(font_size)
     # label.set_fontname('courier')
