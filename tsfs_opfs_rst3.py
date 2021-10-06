@@ -2,9 +2,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 import os
+import pandas as pd
+from help.utils import set_hierarchical_xlabels
+
 if not os.path.exists("fig/tsfs_opfs"):
     os.mkdir("fig/tsfs_opfs")
-os.system("rm -rf fig/tsfs_opfs/*")
+# os.system("rm -rf fig/tsfs_opfs/*")
 # Set the palette using the name of a palette:
 sns.set_theme(style="whitegrid", color_codes=True)
 tips = sns.load_dataset("tips")
@@ -30,16 +33,24 @@ strategy = np.array([
 ])
 _filter = np.array([0, 1, 2, 3, 4])
 dataset = np.array([
-    "HVD\nResNet50",
-    "BPS\nResNet50",
-    "HVD\nInceptionV3",
-    "BPS\nInceptionV3",
-    "HVD\nBERT Base",
-    "BPS\nBERT Base",
-    "HVD\nVGG16",
-    "BPS\nVGG16",
+    "HVD",
+    "BPS",
+    # "HVD",
+    # "BPS",
+    # "HVD",
+    # "BPS",
+    # "HVD",
+    # "BPS",
 ])
-
+dataset_level2 = np.array([
+    "ResNet50",
+    "InceptionV3",
+    "BERT Base",
+    "VGG16"
+])
+tick_width = 1 / len(dataset_level2)
+tick_border = [tick_width * (id + 1) for id in range(len(dataset_level2))]
+locator = np.array(tick_border) - tick_width/2
 
 
 # ''' original
@@ -67,31 +78,41 @@ iter_time_tcp = np.array([
 
 def trial(iter_time, pdf_name="tsfs_opfs_all_tcp", legend=True):
     global max_speedup
-    base = iter_time[:, 0].reshape(len(dataset), 1)
+    base = iter_time[:, 0].reshape(iter_time.shape[0], 1)
     speedup = 100 * (base - iter_time) / base
-    x = np.arange(len(dataset))
+    x = np.arange(iter_time.shape[0])
 
     for i in range(len(iter_time)):
         max_speedup = max(max_speedup, 100 * (max(iter_time[i]) - iter_time[i][1]) / max(iter_time[i]))
 
-    fig = plt.figure(figsize=(15, 4))
-    ax = plt.subplot(111)
-    ax.grid(axis='x')
     yaxis_data = 1000 * BATCH_SIZE / iter_time if USE_THROUGHPUT else iter_time
     yaxis_name = "Throughput" if USE_THROUGHPUT else "Iteration Time (ms)"
 
+    # fig = plt.figure(figsize=(15, 4))
+    # ax = plt.subplot(111)
+    # ax.grid(axis='x')
     if Normalize is not None:
-        base = yaxis_data[:, Normalize].reshape(len(dataset), 1)
+        base = yaxis_data[:, Normalize].reshape(iter_time.shape[0], 1)
         yaxis_data = yaxis_data / base
         yaxis_name = "Normalized " + yaxis_name
 
-    for idx in range(yaxis_data[:, _filter].shape[1]):
-        bars = ax.bar(
-            x + idx*barwidth, yaxis_data[:, _filter][:, idx], width=barwidth, label=strategy[_filter][idx])
-        # for bar in bars:
-        #     bar.set_hatch(marks[idx])
+    a = pd.DataFrame(yaxis_data,
+                 index=pd.MultiIndex.from_product([dataset_level2, dataset]),
+                 columns=strategy)
+
+    
+    ax = a.plot.bar(figsize=(15, 4), legend=False)
+    set_hierarchical_xlabels(a.index, font_size)
+    ax.grid(False)
+
+    # for idx in range(yaxis_data[:, _filter].shape[1]):
+    #     bars = ax.bar(
+    #         x + idx*barwidth, yaxis_data[:, _filter][:, idx], width=barwidth, label=strategy[_filter][idx])
+    #     # for bar in bars:
+    #     #     bar.set_hatch(marks[idx])
+    # plt.xticks(x + (iter_time.shape[1]/2)*barwidth, dataset, fontsize=font_size*0.7, rotation=0)
+    plt.xticks(fontsize=font_size*0.7)
     plt.ylabel(yaxis_name, fontsize=font_size)
-    plt.xticks(x + (iter_time.shape[1]/2)*barwidth, dataset, fontsize=font_size*0.7, rotation=0)
     plt.yticks(np.arange(0, 1.6, 0.3), fontsize=font_size * 0.8)
     if legend:
         plt.legend(bbox_to_anchor=(0., 1.08, 1., .102), ncol=5, fontsize=font_size * 0.75, frameon=False)
@@ -104,5 +125,5 @@ def trial(iter_time, pdf_name="tsfs_opfs_all_tcp", legend=True):
 
 
 trial(iter_time_tcp, "tsfs_opfs_all_tcp")
-trial(iter_time_rdma, "tsfs_opfs_all_rdma", legend=False)
+# trial(iter_time_rdma, "tsfs_opfs_all_rdma", legend=False)
 print("max_speedup: {}".format(max_speedup))

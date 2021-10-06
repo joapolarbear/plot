@@ -94,6 +94,8 @@ for idx in range(len(x_name)):
         width=barwidth, label=x_name[idx])
     # for bar in bars:
     #     bar.set_hatch(marks[idx])
+ax.plot(x + barwidth, _iter_time[:, 1], '-o', color='red',
+             linewidth=3, markersize=10, label="Prediction Error")
 
 # plt.xlabel(title)
 plt.yticks(fontsize=font_size)
@@ -102,7 +104,7 @@ label_params = ax.get_legend_handles_labels()
 figl, axl = plt.subplots(figsize=(50, 1))
 axl.axis(False)
 axl.legend(*label_params,
-    ncol=3, 
+    ncol=4, 
     loc="center", 
     bbox_to_anchor=(0.5, 0.5), 
     frameon=False,
