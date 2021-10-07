@@ -20,25 +20,24 @@ save_dir = "./fig/clock_sync"
 if not os.path.exists(save_dir):
     os.makedirs(save_dir)
 
-dataset = np.array([
+dataset = ["HVD TCP", "BPS RDMA"]
+dataset_level2 = np.array([
     "ResNet50",
     "InceptionV3",
     "VGG16",
     "BERT_Base",
 ])
-dataset_level2 = ["HVD TCP", "BPS RDMA"]
-
 
 strategy = np.array(["Ground Truth", "dPRO", "dPRO w/o sync"])
 _filter = np.array([1, 2])
 iter_time = np.array([
     [212.7014063, 215.322057, 249.0422906],
-    [843.313688, 858.2334128, 897.0615402],
-    [213.173699, 206.3683907, 218.473699],
-    [841.820594, 853.5631494, 948.0208912],
     [283.7625, 285.972318, 290.082053],
+    [843.313688, 858.2334128, 897.0615402],
     [1181.111772, 1208.783676, 1238.807215],
+    [213.173699, 206.3683907, 218.473699],
     [282.004563, 284.2043743, 290.8038892],
+    [841.820594, 853.5631494, 948.0208912],    
     [1349.104047, 1349.231957, 1364.619495],
 ])
 

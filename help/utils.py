@@ -26,7 +26,7 @@ def set_hierarchical_xlabels(index, font_size, ax=None,
             ax.text((xpos0+xpos1)/2, (bar_yinterval * (-i-0.1)),
                     index.levels[-i-1][code],
                     transform=transform,
-                    ha="center", va="top", fontsize=font_size*0.7)
+                    ha="center", va="top", fontsize=font_size*0.8)
             ax.add_line(Line2D([xpos0+bar_xmargin, xpos1-bar_xmargin],
                                [bar_yinterval * -i]*2,
                                transform=transform,

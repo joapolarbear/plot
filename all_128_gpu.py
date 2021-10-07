@@ -71,7 +71,7 @@ set_hierarchical_xlabels(a.index, font_size)
 # plt.xticks(x + (len(x_name)/2)*barwidth, configs,
 #             fontsize=font_size*0.75, rotation=0)
 ax.grid(False)
-plt.xticks(fontsize=font_size*0.75, rotation=0)
+plt.xticks(fontsize=font_size*0.8, rotation=0)
 plt.ylabel("Iteration Time (ms)", fontsize=font_size)
 plt.ylim(0, 1.4*np.max(_iter_time))
 plt.yticks(np.arange(0, 1201, 300), fontsize=font_size)
@@ -165,8 +165,8 @@ dataset_level2 = np.array([
     "BERT Base"
 ])
 strategy = np.array([
-    "Default",
-    "TF XLA",
+    "No Fusion",
+    "XLA",
     "dPRO_OPFS",
     "dPRO_TSFS",
     "dPRO_OPFS_TSFS",
@@ -221,7 +221,7 @@ ax.grid(axis='x')
 #     #     bar.set_hatch(marks[idx])
 # plt.xticks(x + (iter_time.shape[1]/2)*barwidth,
 #            dataset, fontsize=font_size*0.75, rotation=0)
-plt.xticks(fontsize=font_size*0.75, rotation=0)
+plt.xticks(fontsize=font_size*0.8, rotation=0)
 plt.ylabel(yaxis_name, fontsize=font_size)
 plt.yticks(np.arange(0, 301, 75), fontsize=font_size)
 plt.legend(fontsize=font_size, frameon=False)
