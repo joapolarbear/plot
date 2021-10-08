@@ -95,20 +95,28 @@ for idx in range(len(x_name)):
     # for bar in bars:
     #     bar.set_hatch(marks[idx])
 ax.plot(x + barwidth, _iter_time[:, 1], '-o', color='red',
-             linewidth=3, markersize=10, label="Prediction Error")
+             linewidth=6, markersize=20, label="dPRO Prediction Error")
 
 # plt.xlabel(title)
 plt.yticks(fontsize=font_size)
-legend = plt.legend(ncol=3, fontsize=font_size, frameon=False)
+# legend = plt.legend(ncol=4, fontsize=font_size*20, frameon=False)
 label_params = ax.get_legend_handles_labels()
-figl, axl = plt.subplots(figsize=(50, 1))
+figl, axl = plt.subplots(figsize=(50, 2))
 axl.axis(False)
+
+
+label_params = list(label_params)
+for _list in label_params:
+    _list.append(_list.pop(0))
+
 axl.legend(*label_params,
     ncol=4, 
     loc="center", 
     bbox_to_anchor=(0.5, 0.5), 
     frameon=False,
-    prop={"size":50})
+    fontsize=font_size*2,
+    # prop={"size":50}
+    )
 figl.savefig("fig/replay/legend.pdf")
         
 for _key, _iter_time in iter_time.items():

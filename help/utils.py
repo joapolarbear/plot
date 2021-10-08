@@ -32,3 +32,11 @@ def set_hierarchical_xlabels(index, font_size, ax=None,
                                transform=transform,
                                color="k", clip_on=False))
             xpos0 = xpos1
+
+def cal_speedup(ydata, base_column, small_better=True):
+    base = ydata[:, base_column].reshape(ydata.shape[0], 1)
+    if small_better:
+        speedup = 100 * (base - ydata) / base
+    else:
+        speedup = 100 * (ydata - base) / base
+    return speedup
