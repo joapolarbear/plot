@@ -13,7 +13,7 @@ plt.rcParams["font.sans-serif"] = "Simhei"
 USE_THROUGHPUT = False
 BATCH_SIZE = 32
 marks = ["/", "-", "\\", "x", "+", "."]
-barwidth = 0.6
+barwidth = 0.9
 font_size = 24
 
 save_dir = "./fig/clock_sync"
@@ -113,19 +113,21 @@ plot(new_iter_time, name="clock_sync2",
 # plot(iter_time_large_scale, name="clock_sync_large_scale")
 
 ############################################################
-xaxis_name = "# of workers x # of GPUs per worker"
-barwidth = 0.2
+xaxis_name = "# of GPUs"
+barwidth = 0.3
 legends = np.array(["Ground Truth", "dPRO", "w/o Time Alignment"])
 _filter = np.array([1, 2])
-xaxis_name = np.array([
-    "2x8",
-    "4x8",
-    "8x8",
-    "16x8"
+xticks = np.array([
+    "8",
+    "16",
+    "32",
+    "64",
+    "128"
 ])
 
 ### Horovod RDMA VGG16
 iter_time_vgg16 = np.array([
+    [372.099062, 380.457749, 393.345516],
     [196.51543, 199.4792044, 214.8589746],
     [209.921537, 215.2849317, 233.8804146],
     [215.848908, 219.195641, 260.991813],
@@ -133,10 +135,11 @@ iter_time_vgg16 = np.array([
 ])
 
 iter_time_bert_base = np.array([
-    [510.589281, 520.944097, 537.317855],
-    [564.0925925, 581.189598, 637.732206],
-    [676.7370552, 691.801164, 865.715783],
-    [902.3060954, 917.945275, 1233.377383],
+    [467.545562, 480.994518, 491.131356, ],
+    [510.589281, 528.4633504, 553.8426753, ],
+    [564.0925925, 581.189598, 637.732206, ],
+    [676.7370552, 691.801164, 865.715783, ],
+    [902.3060954, 917.945275, 1233.377383, ],
 ])
 
 
@@ -158,15 +161,15 @@ def plot(iter_time, name):
         print(np.max(yaxis_data))
 
     for idx in range(yaxis_data.shape[1]):
-        print(yaxis_data[:, idx])
+        # print(yaxis_data[:, idx])
         bars = ax.bar(
             x + idx*barwidth, yaxis_data[:, idx], width=barwidth, label=legends[_filter][idx])
         # for bar in bars:
         #     bar.set_hatch(marks[idx])
     plt.xticks(x + (iter_time[:,_filter].shape[1]/2)*barwidth,
-               xaxis_name, fontsize=font_size*0.75, rotation=0)
+               xticks, fontsize=font_size*1, rotation=0)
     plt.ylabel(yaxis_name, fontsize=font_size)
-    plt.xlabel(list(xaxis_name), fontsize=0.85*font_size)
+    plt.xlabel(xaxis_name, fontsize=1*font_size)
     plt.yticks(np.arange(0, 1.4*np.max(yaxis_data), 1.4* np.max(yaxis_data)/4//10*10), fontsize=font_size)
     plt.legend(fontsize=font_size*0.85, frameon=False, ncol=1)
     plt.subplots_adjust(left=0.12, bottom=0.15, right=0.97, top=0.95,

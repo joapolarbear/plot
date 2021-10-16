@@ -101,7 +101,7 @@ ax.plot(x + barwidth, _iter_time[:, 1], '-o', color='red',
 plt.yticks(fontsize=font_size)
 # legend = plt.legend(ncol=4, fontsize=font_size*20, frameon=False)
 label_params = ax.get_legend_handles_labels()
-figl, axl = plt.subplots(figsize=(50, 2))
+figl, axl = plt.subplots(figsize=(70, 2))
 axl.axis(False)
 
 
@@ -118,12 +118,17 @@ axl.legend(*label_params,
     # prop={"size":50}
     )
 figl.savefig("fig/replay/legend.pdf")
-        
+
+final_mse = None
 for _key, _iter_time in iter_time.items():
-    base = _iter_time[:, 0].reshape(len(configs), 1)
+    base = _iter_time[:, 0].reshape(_iter_time.shape[0], 1)
     mse = 100 * np.abs(_iter_time - base) / base
-    max_error = max(max_error, max((mse[:, 2] - mse[:, 1]) / mse[:, 1]))
-    max_error = max(max_error, max((mse[:, 2] - mse[:, 1]) / mse[:, 1]))
+    if final_mse is None:
+        final_mse = mse
+    else:
+        final_mse = np.concatenate((final_mse, mse), axis=0)
+    # max_error = max(max_error, max((mse[:, 2] - mse[:, 1]) / mse[:, 1]))
+    # max_error = max(max_error, max((mse[:, 2] - mse[:, 1]) / mse[:, 1]))
 
     fig = plt.figure(figsize=(9, 5))
     ax = plt.subplot(111)
@@ -186,3 +191,21 @@ for _key, _iter_time in iter_time.items():
 print("max_error: {}".format(max_error))
 # plt.title(title, fontsize=font_size)
 
+
+### Large scale data with 128 GPUs
+_iter_time = np.array([
+    [146.2487526, 141.924559, 113.766854],
+    [114.963532, 112.8880371, 112.838],
+    [525.4864351, 529.1857233, 137.659056],
+    [232.8874756, 234.526943, 138.2075],
+    [159.0888947, 154.3139158, 98.772111],
+    [147.6898751, 153.6753495, 97.447889],
+    [841.276743, 794.041738, 347.878962],
+    [1205.85906, 1215.724106, 348.226841],
+])
+base = _iter_time[:, 0].reshape(_iter_time.shape[0], 1)
+mse = 100 * np.abs(_iter_time - base) / base
+final_mse = np.concatenate((final_mse, mse), axis=0)
+
+print("ave", np.average(final_mse, axis=0))
+print("max", np.max(final_mse, axis=0))

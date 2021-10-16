@@ -34,7 +34,7 @@ dataset_level2 = np.array([
     "ResNet50",
     "VGG16",
     "InceptionV3",
-    # "BERT Base",
+    "BERT Base",
 ])
 
 ### Replay error
@@ -49,21 +49,27 @@ dataset_level2 = np.array([
 #     [541.290223, 514.828754, 359.668395],
 # ])
 
+	
+	
+
 _iter_time = np.array([
     [146.2487526, 141.924559, 113.766854],
     [114.963532, 112.8880371, 112.838],
-    [411.6678805, 414.5659156, 137.659056],
-    [226.7604839, 230.2407903, 138.2075],
+    [525.4864351, 529.1857233, 137.659056],
+    [232.8874756, 234.526943, 138.2075],
     [159.0888947, 154.3139158, 98.772111],
     [147.6898751, 153.6753495, 97.447889],
-    # [1874.1539, 1875.061707, 347.878962],
-    # [1205.85906, 1215.724106, 359.668395],
+    [841.276743, 794.041738, 347.878962],
+    [1205.85906, 1215.724106, 348.226841],
 ])
 
 base = _iter_time[:, 0].reshape(_iter_time.shape[0], 1)
 mse = 100 * np.abs(_iter_time - base) / base
 x = np.arange(_iter_time.shape[0])
 max_speedup = max(max_speedup, max((mse[:, 2] - mse[:, 1]) / mse[:, 1]))
+
+print("ave", np.average(mse, axis=0))
+print("max", np.max(mse, axis=0))
 
 fig = plt.figure(figsize=(15, 5))
 ax = plt.subplot(111)
@@ -112,7 +118,7 @@ print("Replayer max_speedup:{}".format(max_speedup))
 
 ### Tensor Fusion
 '''
-strategy = [
+legends = [
     "Fuse all Tensors",
     "dPRO_TSFS",
     "No Tensor Fusion",
@@ -149,7 +155,7 @@ yaxis_name = "Throughput\n(samples/s)" if USE_THROUGHPUT else "Iteration Time (m
 
 for idx in range(iter_time.shape[1]):
     bars = ax.bar(
-        x + idx*barwidth, yaxis_data[:, idx], width=barwidth, label=strategy[idx])
+        x + idx*barwidth, yaxis_data[:, idx], width=barwidth, label=legends[idx])
     # for bar in bars:
     #     bar.set_hatch(marks[idx])
 plt.ylabel(yaxis_name, fontsize=font_size)
@@ -176,8 +182,8 @@ dataset_level2 = np.array([
     "VGG16",
     "BERT Base"
 ])
-strategy = np.array([
-    "No Fusion",
+legends = np.array([
+    "Horovod",
     "XLA",
     "dPRO_OPFS",
     "dPRO_TSFS",
@@ -237,13 +243,13 @@ yaxis_name = "Throughput per GPU\n(samples/sec)" if USE_THROUGHPUT else "Iterati
 
 a = pd.DataFrame(yaxis_data,
                  index=pd.MultiIndex.from_product([dataset_level2, dataset]),
-                 columns=strategy[_filter])
+                 columns=legends[_filter])
 ax = a.plot.bar(figsize=(15, 4), legend=False)
 set_hierarchical_xlabels(a.index, font_size)
 ax.grid(axis='x')
 # for idx in range(yaxis_data.shape[1]):
 #     bars = ax.bar(
-#         x + idx*barwidth, yaxis_data[:, idx], width=barwidth, label=strategy[_filter][idx])
+#         x + idx*barwidth, yaxis_data[:, idx], width=barwidth, label=legends[_filter][idx])
 #     # for bar in bars:
 #     #     bar.set_hatch(marks[idx])
 # plt.xticks(x + (iter_time.shape[1]/2)*barwidth,

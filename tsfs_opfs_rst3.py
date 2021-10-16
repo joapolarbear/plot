@@ -24,8 +24,8 @@ USE_THROUGHPUT = True
 BATCH_SIZE = 32
 Normalize = 1
 
-strategy = np.array([
-    "No Fusion",
+legends = np.array([
+    "Default BytePS/Horovod",
     "XLA",
     "dPRO_OPFS",
     "dPRO_TSFS",
@@ -101,7 +101,7 @@ def trial(iter_time, pdf_name="tsfs_opfs_all_tcp", legend=True):
 
     a = pd.DataFrame(yaxis_data[:, _filter],
                  index=pd.MultiIndex.from_product([dataset_level2, dataset]),
-                 columns=strategy[_filter])
+                 columns=legends[_filter])
 
     
     ax = a.plot.bar(figsize=(15, 4), legend=False, width=barwidth)
@@ -110,7 +110,7 @@ def trial(iter_time, pdf_name="tsfs_opfs_all_tcp", legend=True):
 
     # for idx in range(yaxis_data[:, _filter].shape[1]):
     #     bars = ax.bar(
-    #         x + idx*barwidth, yaxis_data[:, _filter][:, idx], width=barwidth, label=strategy[_filter][idx])
+    #         x + idx*barwidth, yaxis_data[:, _filter][:, idx], width=barwidth, label=legends[_filter][idx])
     #     # for bar in bars:
     #     #     bar.set_hatch(marks[idx])
     # plt.xticks(x + (iter_time.shape[1]/2)*barwidth, dataset, fontsize=font_size*0.7, rotation=0)
@@ -118,7 +118,7 @@ def trial(iter_time, pdf_name="tsfs_opfs_all_tcp", legend=True):
     plt.ylabel(yaxis_name, fontsize=font_size)
     plt.yticks(np.arange(0, 1.6, 0.3), fontsize=font_size * 0.8)
     if legend:
-        plt.legend(bbox_to_anchor=(0., 1.08, 1., .102), ncol=3, fontsize=font_size * 0.75, frameon=False)
+        plt.legend(bbox_to_anchor=(0., 1.0, 1., 0.0), ncol=3, fontsize=font_size * 0.75, frameon=False)
         plt.subplots_adjust(left=0.13, bottom=0.1, right=0.95, top=0.95,
                         wspace=0.2, hspace=0.3)
     else:
