@@ -21,7 +21,7 @@ def plot_dist(_y, _name):
     # If True, compute a kernel density estimate to smooth the 
     # distribution and show on the plot as (one or more) line(s). Only relevant with univariate data.
 
-    plt.xlabel("TIR kernel cost (s)", fontsize=font_size)
+    plt.xlabel("TIR kernel latency (s)", fontsize=font_size)
     if _name == "y":
         plt.xticks(fontsize=font_size-2, rotation=60)
     else:

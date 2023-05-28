@@ -7,6 +7,8 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from matplotlib.ticker import MultipleLocator, FormatStrFormatter
 
+from utils import reduce_tick_num
+
 os.makedirs("fig/end2end-cd", exist_ok=True)
 # os.system("rm -rf fig/end2end-cd/*")
 
@@ -23,7 +25,7 @@ marks = ["/", "-", "\\", "x", "+", "."]
 barwidth = 0.2
 font_size = 36
 
-column_names = ["Ground Truth", "Habitat", "Ours"]
+column_names = ["Ground Truth", "Habitat", "CDMPP"]
 row_names = [
     # "ResNet-50\\BS=1",
     "ResNet-50\nBS=4",
@@ -64,7 +66,7 @@ tir_time = {
 max_error = 0
 max_error_daydream = 0
 
-fig = plt.figure(figsize=(9, 5))
+fig = plt.figure(figsize=(5, 5))
 ax = plt.subplot(111)
 _tir_time = list(tir_time.values())[0]
 for idx in range(len(column_names)):
@@ -74,13 +76,13 @@ for idx in range(len(column_names)):
     # for bar in bars:
     #     bar.set_hatch(marks[idx])
 ax.plot(x + barwidth, _tir_time[:, 1], '-o', color='red',
-             linewidth=6, markersize=20, label="CDMPP Prediction Error")
+             linewidth=6, markersize=20, label="CDMPP")
 
 # plt.xlabel(title)
 plt.yticks(fontsize=font_size)
 # legend = plt.legend(ncol=4, fontsize=font_size*20, frameon=False)
 label_params = ax.get_legend_handles_labels()
-figl, axl = plt.subplots(figsize=(70, 2))
+figl, axl = plt.subplots(figsize=(40, 2))
 axl.axis(False)
 
 label_params = list(label_params)
@@ -98,13 +100,6 @@ axl.legend(*label_params,
 figl.savefig("fig/end2end-cd/legend.pdf")
 plt.close()
 
-
-def reduce_ytick_num(num):
-    locs, labels = plt.yticks()
-    new_locs = np.arange(0, max(locs), step=max(locs)/float(num))
-    # new_ticks = (new_locs / 1e4).astype(int)
-    plt.yticks(new_locs, fontsize=font_size-2)
-
 def plot_group_bar(_data, row_names, column_names, save_name, xaxis_name):
     base = _data[:, 0].reshape(_data.shape[0], 1)
     mape = 100 * np.abs(_data - base) / base
@@ -115,7 +110,7 @@ def plot_group_bar(_data, row_names, column_names, save_name, xaxis_name):
     #     fig = plt.figure(figsize=(16, 5))
     # else:
     #     fig = plt.figure(figsize=(12, 5))
-    fig = plt.figure(figsize=(12, 6))
+    fig = plt.figure(figsize=(10, 6))
     ax = plt.subplot(111)
     for idx in range(len(column_names)):
         bars = ax.bar(
@@ -125,16 +120,16 @@ def plot_group_bar(_data, row_names, column_names, save_name, xaxis_name):
         #     bar.set_hatch(marks[idx])
     ax.grid(False)
     plt.ylabel("Time Cost (ms)", fontsize=font_size+2)
-    plt.xlabel(xaxis_name, fontsize=font_size)
+    plt.xlabel(xaxis_name, fontsize=font_size+2)
     if "habana" in save_name:
         plt.xticks(xaxis + (len(column_names)/2-0.5)*barwidth, row_names,
                fontsize=font_size-10, rotation=0)
     else:
         plt.xticks(xaxis + (len(column_names)/2-0.5)*barwidth, row_names,
-               fontsize=font_size-2, rotation=0)
+               fontsize=font_size-10, rotation=0)
         
     plt.ylim(0, 1.2*np.max(_data))
-    reduce_ytick_num(5)
+    reduce_tick_num(5, low=0)
 
     ax2 = ax.twinx()  # instantiate a second axes that shares the same x-axis
     ax2.set_ylabel('Prediction Error (%)', fontsize=font_size)  # we already handled the x-label with ax1
@@ -145,7 +140,7 @@ def plot_group_bar(_data, row_names, column_names, save_name, xaxis_name):
         label.set_fontsize(font_size+2)
         # label.set_fontname('courier')
     plt.ylim(0, 1.2*np.max(mape[:, -1]))
-    reduce_ytick_num(5)
+    reduce_tick_num(5, low=0, type=int)
 
     plt.tight_layout()
     plt.savefig("fig/end2end-cd/{}.pdf".format(save_name), bbox_inches='tight')
