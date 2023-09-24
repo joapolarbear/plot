@@ -3,14 +3,15 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 import os
+
+from help.utils import *
+
 if not os.path.exists("fig/opfs"):
     os.mkdir("fig/opfs")
 os.system("rm -rf fig/opfs/*")
 # Set the palette using the name of a palette:
 sns.set_theme(style="whitegrid", color_codes=True)
 tips = sns.load_dataset("tips")
-
-plt.rcParams["font.sans-serif"] = "Simhei"
 
 x_name = np.array(["No Fusion", "TF XLA", "dPRO_OPFS"])
 
@@ -68,7 +69,6 @@ for _key, _iter_time in iter_time.items():
     yaxis_name = "Throughput\n(samples/s)" if USE_THROUGHPUT else "Iteration Time (ms)"
     
     x = np.arange(len(configs))
-    marks = ["/", "-", "\\", "x", "+", "."]
 
     fig = plt.figure(figsize=(12, 4))
     ax = plt.subplot(111)

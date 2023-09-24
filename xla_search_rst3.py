@@ -2,13 +2,15 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 import os
+
+from help.utils import *
+
 if not os.path.exists("fig/opfs2"):
     os.mkdir("fig/opfs2")
 # os.system("rm -rf fig/opfs2/*")
 # Set the palette using the name of a palette:
 sns.set_theme(style="whitegrid", color_codes=True)
 tips = sns.load_dataset("tips")
-plt.rcParams["font.sans-serif"] = "Simhei"
 
 # iter_time = {
 #     "ResNet50": np.array([
@@ -40,7 +42,6 @@ plt.rcParams["font.sans-serif"] = "Simhei"
 
 USE_THROUGHPUT = True
 BATCH_SIZE = 32
-marks = ["/", "-", "\\", "x", "+", "."]
 barwidth = 0.2
 font_size = 24
 

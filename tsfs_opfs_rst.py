@@ -3,6 +3,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 import os
+
+from help.utils import *
+
 if not os.path.exists("fig/tsfs_opfs"):
     os.mkdir("fig/tsfs_opfs")
 os.system("rm -rf fig/tsfs_opfs/*")
@@ -10,10 +13,6 @@ os.system("rm -rf fig/tsfs_opfs/*")
 sns.set_theme(style="whitegrid", color_codes=True)
 tips = sns.load_dataset("tips")
 
-plt.rcParams["font.sans-serif"] = "Simhei"
-#填充符号
-# marks = ["o","X","+","*","O","."]
-marks = ["/", "-", "\\", "x", "+", "."]
 barwidth = 0.15
 font_size = 24
 max_speedup = 0
@@ -21,13 +20,13 @@ max_speedup = 0
 USE_THROUGHPUT = True
 BATCH_SIZE = 32
 
-strategy = [
+strategy = np.array([
     "No Fusion",
     "TF XLA",
     "dPRO_OPFS",
     "dPRO_TSFS",
     "dPRO_OPFS_TSFS",
-]
+])
 
 _filter = np.array([0, 1, 2, 4])
 

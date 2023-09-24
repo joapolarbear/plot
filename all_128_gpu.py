@@ -4,10 +4,11 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import os
 import pandas as pd
-from help.utils import set_hierarchical_xlabels
+
+from help.utils import *
+
 if not os.path.exists("fig/large_scale"):
-    os.mkdir("fig/large_scale")
-# os.system("rm -rf fig/large_scale/*")
+    os.makedirs("fig/large_scale", exist_ok=True)
 # Set the palette using the name of a palette:
 rc = {'axes.spines.left': True,
      'axes.spines.right': True,
@@ -15,12 +16,9 @@ rc = {'axes.spines.left': True,
     }
 sns.set_theme(style="whitegrid", color_codes=True, rc=rc)
 tips = sns.load_dataset("tips")
-plt.rcParams["font.sans-serif"] = "Simhei"
 
 USE_THROUGHPUT = True
 BATCH_SIZE = 32
-# marks = ["o","X","+","*","O","."]
-marks = ["/", "-", "\\", "x", "+", "."]
 barwidth = 0.2
 font_size = 24
 max_speedup = 0
@@ -49,9 +47,6 @@ dataset_level2 = np.array([
 #     [541.290223, 514.828754, 359.668395],
 # ])
 
-	
-	
-
 _iter_time = np.array([
     [146.2487526, 141.924559, 113.766854],
     [114.963532, 112.8880371, 112.838],
@@ -79,6 +74,7 @@ a = pd.DataFrame(_iter_time,
                  columns=x_name)
 ax = a.plot.bar(figsize=(15, 4), legend=False)
 set_hierarchical_xlabels(a.index, font_size)
+set_bar_hatch(ax, a)
 # for idx in range(len(x_name)):
 #     bars = ax.bar(
 #         x + idx*barwidth, _iter_time[:, idx],
@@ -247,6 +243,9 @@ a = pd.DataFrame(yaxis_data,
 ax = a.plot.bar(figsize=(15, 4), legend=False)
 set_hierarchical_xlabels(a.index, font_size)
 ax.grid(axis='x')
+
+set_bar_hatch(ax, a)
+
 # for idx in range(yaxis_data.shape[1]):
 #     bars = ax.bar(
 #         x + idx*barwidth, yaxis_data[:, idx], width=barwidth, label=legends[_filter][idx])

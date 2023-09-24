@@ -40,3 +40,11 @@ def cal_speedup(ydata, base_column, small_better=True):
     else:
         speedup = 100 * (ydata - base) / base
     return speedup
+
+marks = ["/", "-", "\\", "x", "+", "."]
+plt.rcParams['hatch.linewidth'] = 1.5
+
+def set_bar_hatch(ax, df):
+    bars = ax.patches
+    for idx, bar in enumerate(bars):
+        bar.set_hatch(marks[idx//df.shape[0]])

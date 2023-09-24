@@ -7,20 +7,17 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from matplotlib.ticker import MultipleLocator, FormatStrFormatter
 
+from help.utils import *
+
 if not os.path.exists("fig/replay"):
     os.mkdir("fig/replay")
 # os.system("rm -rf fig/replay/*")
-
-mpl.rcParams['hatch.linewidth'] = 0.5
 
 # Set the palette using the name of a palette:
 sns.set_theme(style="whitegrid", color_codes=True)
 # sns.set_theme(style="darkgrid", color_codes=True)
 tips = sns.load_dataset("tips")
 
-# plt.rcParams["font.sans-serif"] = "Simhei"
-# marks = ["o","X","+","*","O","."]
-marks = ["/", "-", "\\", "x", "+", "."]
 barwidth = 0.2
 font_size = 36
 
@@ -92,8 +89,8 @@ for idx in range(len(x_name)):
     bars = ax.bar(
         x + idx*barwidth, _iter_time[:, idx],
         width=barwidth, label=x_name[idx])
-    # for bar in bars:
-    #     bar.set_hatch(marks[idx])
+    for bar in bars:
+        bar.set_hatch(marks[idx])
 ax.plot(x + barwidth, _iter_time[:, 1], '-o', color='red',
              linewidth=6, markersize=20, label="dPRO Prediction Error")
 
@@ -136,8 +133,8 @@ for _key, _iter_time in iter_time.items():
         bars = ax.bar(
             x + idx*barwidth, _iter_time[:, idx],
             width=barwidth, label=x_name[idx])
-        # for bar in bars:
-        #     bar.set_hatch(marks[idx])
+        for bar in bars:
+            bar.set_hatch(marks[idx])
     ax.grid(False)
     plt.ylabel("Iteration Time (ms)", fontsize=font_size+2)
     import math

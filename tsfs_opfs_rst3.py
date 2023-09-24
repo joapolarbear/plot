@@ -3,7 +3,8 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import os
 import pandas as pd
-from help.utils import set_hierarchical_xlabels
+
+from help.utils import *
 
 if not os.path.exists("fig/tsfs_opfs"):
     os.mkdir("fig/tsfs_opfs")
@@ -12,10 +13,6 @@ if not os.path.exists("fig/tsfs_opfs"):
 sns.set_theme(style="whitegrid", color_codes=True)
 tips = sns.load_dataset("tips")
 
-plt.rcParams["font.sans-serif"] = "Simhei"
-#填充符号
-# marks = ["o","X","+","*","O","."]
-marks = ["/", "-", "\\", "x", "+", "."]
 barwidth = 0.7
 font_size = 24
 max_speedup = 0
@@ -87,6 +84,7 @@ def trial(iter_time, pdf_name="tsfs_opfs_all_tcp", legend=True):
         max_speedup = max(max_speedup, 100 * (max(iter_time[i]) - iter_time[i][1]) / max(iter_time[i]))
 
     yaxis_data = 1000 * BATCH_SIZE / iter_time if USE_THROUGHPUT else iter_time
+    yaxis_data = np.nan_to_num(yaxis_data, posinf=0)
     yaxis_name = "Throughput" if USE_THROUGHPUT else "Iteration Time (ms)"
 
     # fig = plt.figure(figsize=(15, 4))
@@ -107,6 +105,7 @@ def trial(iter_time, pdf_name="tsfs_opfs_all_tcp", legend=True):
     ax = a.plot.bar(figsize=(15, 4), legend=False, width=barwidth)
     set_hierarchical_xlabels(a.index, font_size)
     ax.grid("x")
+    set_bar_hatch(ax, a)
 
     # for idx in range(yaxis_data[:, _filter].shape[1]):
     #     bars = ax.bar(

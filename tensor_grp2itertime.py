@@ -6,9 +6,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-# if not os.path.exists("fig/replay"):
-#     os.mkdir("fig/replay")
-# os.system("rm -rf fig/replay/*")
+from help.utils import *
 
 sns.set_theme(style="whitegrid", color_codes=True)
 tips = sns.load_dataset("tips")

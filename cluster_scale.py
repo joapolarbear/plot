@@ -4,7 +4,9 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import os
 import pandas as pd
-from help.utils import set_hierarchical_xlabels, cal_speedup
+
+from help.utils import *
+
 if not os.path.exists("fig/large_scale"):
     os.mkdir("fig/large_scale")
 # os.system("rm -rf fig/large_scale/*")
@@ -15,12 +17,9 @@ rc = {'axes.spines.left': True,
     }
 sns.set_theme(style="whitegrid", color_codes=True, rc=rc)
 tips = sns.load_dataset("tips")
-plt.rcParams["font.sans-serif"] = "Simhei"
 
 USE_THROUGHPUT = True
 BATCH_SIZE = 32
-# marks = ["o","X","+","*","O","."]
-marks = ["/", "-", "\\", "x", "+", "."]
 barwidth = 0.2
 font_size = 24
 
@@ -67,8 +66,8 @@ def plot(iter_time, name, is_legend=False):
         # print(yaxis_data[:, idx])
         bars = ax.bar(
             x + idx*barwidth, yaxis_data[:, idx], width=barwidth, label=legends[_filter][idx])
-        # for bar in bars:
-        #     bar.set_hatch(marks[idx])
+        for bar in bars:
+            bar.set_hatch(marks[idx])
     plt.xticks(x + (iter_time.shape[1]/2)*barwidth,
                xticks, fontsize=font_size*1, rotation=0)
     plt.ylabel(yaxis_name, fontsize=font_size)
@@ -96,8 +95,8 @@ for idx in range(_iter_time.shape[1]):
     bars = ax.bar(
         x + idx*barwidth, _iter_time[:, idx],
         width=barwidth, label=legends[_filter][idx])
-    # for bar in bars:
-    #     bar.set_hatch(marks[idx])
+    for bar in bars:
+        bar.set_hatch(marks[idx])
 # plt.xlabel(title)
 plt.yticks(fontsize=font_size)
 # legend = plt.legend(ncol=4, fontsize=font_size*20, frameon=False)

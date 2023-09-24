@@ -3,18 +3,16 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 import os
+
+from help.utils import *
+
 # Set the palette using the name of a palette:
 rc = {'axes.spines.left': True,
      'axes.spines.right': True,
      'axes.spines.top': False,
     }
 sns.set_theme(style="whitegrid", color_codes=True, rc=rc)
-print(sns.axes_style())
 tips = sns.load_dataset("tips")
-plt.rcParams["font.sans-serif"] = "Simhei"
-plt.rcParams["font.sans-serif"] = "Simhei"
-# marks = ["o","X","+","*","O","."]
-marks = ["/", "-", "\\", "x", "+", "."]
 barwidth = 0.2
 font_size = 24
 
@@ -42,8 +40,8 @@ for idx in range(len(x_name)):
     bars = ax.bar(
         x + idx*barwidth, _iter_time[:, idx],
         width=barwidth, label=x_name[idx])
-    # for bar in bars:
-    #     bar.set_hatch(marks[idx])
+    for bar in bars:
+        bar.set_hatch(marks[idx])
 ax.grid(False)
 plt.ylabel("Iteration Time (ms)", fontsize=font_size)
 plt.ylim(0, 1.4*np.max(_iter_time))

@@ -3,6 +3,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 import os
+
+from help.utils import *
+
 if not os.path.exists("fig/tsfs"):
     os.mkdir("fig/tsfs")
 os.system("rm -rf fig/tsfs/*")
@@ -10,10 +13,6 @@ os.system("rm -rf fig/tsfs/*")
 sns.set_theme(style="whitegrid", color_codes=True)
 tips = sns.load_dataset("tips")
 
-plt.rcParams["font.sans-serif"] = "Simhei"
-#填充符号
-# marks = ["o","X","+","*","O","."]
-marks = ["/", "-", "\\", "x", "+", "."]
 barwidth = 0.2
 font_size = 24
 max_speedup = 0

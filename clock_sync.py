@@ -4,15 +4,15 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
 import pandas as pd
-from help.utils import set_hierarchical_xlabels
+
+from help.utils import *
 
 sns.set_theme(style="whitegrid", color_codes=True)
 tips = sns.load_dataset("tips")
-plt.rcParams["font.sans-serif"] = "Simhei"
+# plt.rcParams["font.sans-serif"] = "Simhei"
 
 USE_THROUGHPUT = False
 BATCH_SIZE = 32
-marks = ["/", "-", "\\", "x", "+", "."]
 barwidth = 0.9
 font_size = 24
 
@@ -70,6 +70,7 @@ def plot(_iter_time, name="clock_sync", _xaxis_name=None, _xaxis_size=None, bar_
     ax = a.plot.bar(figsize=(12, 4), legend=False, width=barwidth)
     set_hierarchical_xlabels(a.index, font_size, bar_yinterval=0.12 if bar_yinterval is None else bar_yinterval)
     ax.grid(axis='x')
+    set_bar_hatch(ax, a)
 
     # for idx in range(1, yaxis_data[:, _filter].shape[1]):
     #     bars = ax.bar(
@@ -164,8 +165,8 @@ def plot(iter_time, name):
         # print(yaxis_data[:, idx])
         bars = ax.bar(
             x + idx*barwidth, yaxis_data[:, idx], width=barwidth, label=legends[_filter][idx])
-        # for bar in bars:
-        #     bar.set_hatch(marks[idx])
+        for bar in bars:
+            bar.set_hatch(marks[idx])
     plt.xticks(x + (iter_time[:,_filter].shape[1]/2)*barwidth,
                xticks, fontsize=font_size*1, rotation=0)
     plt.ylabel(yaxis_name, fontsize=font_size)
