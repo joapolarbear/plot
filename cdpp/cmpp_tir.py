@@ -8,20 +8,11 @@ import seaborn as sns
 import math
 from matplotlib.ticker import MultipleLocator, FormatStrFormatter
 
-from utils import fig_base, reduce_tick_num
+from utils import *
 
 fig_dir = os.path.join(os.path.dirname(__file__), "fig/cmpp_tir")
 os.makedirs(fig_dir, exist_ok=True)
 
-mpl.rcParams['hatch.linewidth'] = 0.5
-# Set the palette using the name of a palette:
-sns.set_theme(style="whitegrid", color_codes=True)
-# sns.set_theme(style="darkgrid", color_codes=True)
-tips = sns.load_dataset("tips")
-
-# plt.rcParams["font.sans-serif"] = "Simhei"
-# marks = ["o","X","+","*","O","."]
-marks = ["/", "-", "\\", "x", "+", "."]
 barwidth = 0.25
 font_size = 36
 
@@ -47,6 +38,8 @@ def _plot(fig_name: str, pd_data: pd.DataFrame):
             data_on_all_devices = np.array(pd_data.loc[_devices, _method])
             bars = ax.bar(x + idx*barwidth, data_on_all_devices,
                 width=barwidth, label=_method)
+            for bar in bars:
+                bar.set_hatch(marks[idx])
             if fig_name.startswith("MAPE"):
                 for i, v in enumerate(data_on_all_devices):
                     if v == 0:
@@ -61,7 +54,7 @@ def _plot(fig_name: str, pd_data: pd.DataFrame):
         # import math
         # max_y_value = int(math.ceil(1.05*np.max(_tir_time)/100)*100)
         # ax.set_yticks(np.arange(0, max_y_value+1, int(max_y_value/4)))
-        plt.ylim(0, 1.65*max(np.max(pd_data.loc[_devices, :])))
+        plt.ylim(0, 1.8*np.max(pd_data.loc[_devices, :]))
         # ymajorLocator = MultipleLocator(int(1.1*np.max(_tir_time)/4//10*10))
         # ax.yaxis.set_major_locator(ymajorLocator) 
         plt.xticks(x + (len(method_names)/2-0.5)*barwidth, devices[st:ed],

@@ -9,20 +9,11 @@ import math
 from matplotlib.ticker import MultipleLocator, FormatStrFormatter
 
 
-from utils import fig_base, reduce_tick_num
+from utils import *
 
 fig_dir = os.path.join(os.path.dirname(__file__), "fig/ablation")
 os.makedirs(fig_dir, exist_ok=True)
 
-mpl.rcParams['hatch.linewidth'] = 0.5
-# Set the palette using the name of a palette:
-sns.set_theme(style="whitegrid", color_codes=True)
-# sns.set_theme(style="darkgrid", color_codes=True)
-tips = sns.load_dataset("tips")
-
-# plt.rcParams["font.sans-serif"] = "Simhei"
-# marks = ["o","X","+","*","O","."]
-marks = ["/", "-", "\\", "x", "+", "."]
 barwidth = 0.25
 font_size = 36
 
@@ -43,6 +34,8 @@ for idx in range(len(method_names)):
     data_on_all_devices = np.array(df_data.loc[devices, _method])
     bars = ax.bar(x + idx*barwidth, data_on_all_devices,
         width=barwidth, label=_method)
+    for bar in bars:
+        bar.set_hatch(marks[idx])
     for i, v in enumerate(data_on_all_devices):
         if v == 0:
             continue

@@ -8,23 +8,13 @@ import seaborn as sns
 import math
 from matplotlib.ticker import MultipleLocator, FormatStrFormatter
 
-from utils import fig_base, reduce_tick_num
+from utils import *
 
 fig_dir = os.path.join(os.path.dirname(__file__), "fig/cmpp_finetune")
 os.makedirs(fig_dir, exist_ok=True)
 
-mpl.rcParams['hatch.linewidth'] = 0.5
-# Set the palette using the name of a palette:
-sns.set_theme(style="whitegrid", color_codes=True)
-# sns.set_theme(style="darkgrid", color_codes=True)
-tips = sns.load_dataset("tips")
-
-# plt.rcParams["font.sans-serif"] = "Simhei"
-# marks = ["o","X","+","*","O","."]
-marks = ["/", "-", "\\", "x", "+", "."]
-barwidth = 0.1
+barwidth = 0.2
 font_size = 36
-
 
 def _plot(mape_df, device):
     mape_df.set_index("Networks", inplace=True)
@@ -40,6 +30,8 @@ def _plot(mape_df, device):
         data_on_all_devices = np.array(mape_df.loc[networks, _method])
         bars = ax.bar(x + idx*barwidth, data_on_all_devices,
             width=barwidth, label=_method)
+        for bar in bars:
+            bar.set_hatch(marks[idx])
         for i, v in enumerate(data_on_all_devices):
             ax.text(x[i] + (idx-0.3)*barwidth, v + 10, f"{float(v):.1f}",
                 fontsize=font_size * 0.8, rotation=90,
@@ -48,7 +40,7 @@ def _plot(mape_df, device):
             )
     ax.grid(axis="x")
     plt.ylabel("MAPE (%)", fontsize=font_size+2)
-    plt.ylim(0, 1.8*max(np.max(mape_df.loc[networks, :])))
+    plt.ylim(0, 1.8*np.max(mape_df.loc[networks, :]))
     plt.xticks(x + (len(method_names)/2-0.5)*barwidth, networks,
             fontsize=font_size-2, rotation=0)
     plt.xlabel("Target Network", fontsize=font_size)

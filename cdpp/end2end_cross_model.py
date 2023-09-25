@@ -7,21 +7,10 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from matplotlib.ticker import MultipleLocator, FormatStrFormatter
 
-from utils import reduce_tick_num
+from utils import *
 
 os.makedirs("fig/end2end-cm", exist_ok=True)
-# os.system("rm -rf fig/end2end-cm/*")
 
-mpl.rcParams['hatch.linewidth'] = 0.5
-
-# Set the palette using the name of a palette:
-sns.set_theme(style="whitegrid", color_codes=True)
-# sns.set_theme(style="darkgrid", color_codes=True)
-tips = sns.load_dataset("tips")
-
-# plt.rcParams["font.sans-serif"] = "Simhei"
-# marks = ["o","X","+","*","O","."]
-marks = ["/", "-", "\\", "x", "+", "."]
 barwidth = 0.22
 font_size = 36
 
@@ -91,8 +80,8 @@ for idx in range(len(column_names)):
     bars = ax.bar(
         x + idx*barwidth, _tir_time[:, idx],
         width=barwidth, label=column_names[idx])
-    # for bar in bars:
-    #     bar.set_hatch(marks[idx])
+    for bar in bars:
+        bar.set_hatch(marks[idx])
 # ax.plot(x + barwidth, _tir_time[:, -3],
 #              linewidth=6, markersize=20, label=column_names[-3])
 # ax.plot(x + barwidth, _tir_time[:, -2],
@@ -129,7 +118,7 @@ def plot_group_bar(_data, row_names, column_names, save_name, xaxis_name):
     # max_error = max(max_error, max((mape[:, 2] - mape[:, 1]) / mape[:, 1]))
     xaxis = np.arange(len(row_names))
     if "habana" in save_name:
-        fig = plt.figure(figsize=(14, 6))
+        fig = plt.figure(figsize=(16, 6))
     else:
         fig = plt.figure(figsize=(10, 6))
     ax = plt.subplot(111)
@@ -137,8 +126,8 @@ def plot_group_bar(_data, row_names, column_names, save_name, xaxis_name):
         bars = ax.bar(
             xaxis + idx*barwidth, _data[:, idx],
             width=barwidth, label=column_names[idx])
-        # for bar in bars:
-        #     bar.set_hatch(marks[idx])
+        for bar in bars:
+            bar.set_hatch(marks[idx])
     ax.grid(False)
     plt.ylabel("Time Cost (ms)", fontsize=font_size+2)
     plt.xlabel(xaxis_name, fontsize=font_size+2)
