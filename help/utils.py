@@ -1,7 +1,11 @@
 from itertools import groupby
 from matplotlib.lines import Line2D
 import pandas as pd
+
+import matplotlib
 import matplotlib.pyplot as plt
+matplotlib.rcParams['pdf.fonttype'] = 42
+matplotlib.rcParams['ps.fonttype'] = 42
 
 ### Refer to https://linuxtut.com/en/92c21048bacadce811ec/
 def set_hierarchical_xlabels(index, font_size, ax=None,
