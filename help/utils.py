@@ -7,6 +7,19 @@ import matplotlib.pyplot as plt
 matplotlib.rcParams['pdf.fonttype'] = 42
 matplotlib.rcParams['ps.fonttype'] = 42
 
+from types import List
+
+def smooth(scalars: List[float], weight: float) -> List[float]:
+    # One of the easiest implementations I found was to use that Exponential Moving Average the Tensorboard uses, https://stackoverflow.com/questions/5283649/plot-smooth-line-with-pyplot
+    # Weight between 0 and 1
+    last = scalars[0]  # First value in the plot (first timestep)
+    smoothed = list()
+    for point in scalars:
+        smoothed_val = last * weight + (1 - weight) * point  # Calculate smoothed value
+        smoothed.append(smoothed_val)                        # Save it
+        last = smoothed_val                                  # Anchor the last smoothed value
+    return smoothed
+
 ### Refer to https://linuxtut.com/en/92c21048bacadce811ec/
 def set_hierarchical_xlabels(index, font_size, ax=None,
                              bar_xmargin=0.1, #Margins on the left and right ends of the line, X-axis scale
